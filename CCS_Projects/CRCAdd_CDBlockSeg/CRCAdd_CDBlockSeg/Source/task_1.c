@@ -26,7 +26,8 @@ int CRCAdd(int *poutbit, int *ptempinput, unsigned int udBitLen)
   // CRC24A
   int L = 24;
   // 生成多项式
-  int *poly = &G;
+  int *poly;
+  poly = &G;
   int i = 0;
   int j = 0;
 
@@ -61,7 +62,8 @@ int CRCbAdd(int *poutbit, int *ptempinput,
   // CRC24B
   int L = 24;
   // 生成多项式
-  int *poly = &G1;
+  int *poly;
+  poly = &G1;
   int i = 0;
   int j = 0;
   for (i = 0; i < udBitLen; i++)
