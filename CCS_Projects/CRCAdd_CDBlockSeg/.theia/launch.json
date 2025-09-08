@@ -1,0 +1,19 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "CRCAdd_CDBlockSeg",
+            "type": "ccs-debug",
+            "request": "launch",
+            "projectInfo": {
+                "name": "CRCAdd_CDBlockSeg",
+                "resourceId": "/CRCAdd_CDBlockSeg"
+            },
+            "launchSettings": {
+                "coresToLoadForProjectLaunch": [
+                    "C66xx_0"
+                ]
+            }
+        }
+    ]
+}
