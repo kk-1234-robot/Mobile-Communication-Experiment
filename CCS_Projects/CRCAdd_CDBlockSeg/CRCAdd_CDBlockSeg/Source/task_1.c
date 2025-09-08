@@ -160,10 +160,10 @@ int cdblockseg(int *pcodeblockbit,
     {
       // 填充比特可用特殊值标记，这里用-1
       for (unsigned int i = 0; i < k; i++)
-        pcodeblockbit[r * K_r + i] = -1;
+        pcodeblockbit[r * Z + i] = -1;
       for (unsigned int i = k; i < K_r - L; i++)
       {
-        pcodeblockbit[r * K_r + i] = pinputbit[s + i - k];
+        pcodeblockbit[r * Z + i] = pinputbit[s + i - k];
       }
       s += K_r - L - k;
     }
@@ -171,14 +171,14 @@ int cdblockseg(int *pcodeblockbit,
     {
       for (unsigned int i = 0; i < K_r - L; i++)
       {
-        pcodeblockbit[r * K_r + i] = pinputbit[s + i];
+        pcodeblockbit[r * Z + i] = pinputbit[s + i];
       }
       s += K_r - L;
     }
     // CRC24B添加
     if (C > 1)
     {
-      CRCbAdd(&pcodeblockbit[r * K_r + K_r - L], ptempbit, K_r);
+      CRCbAdd(&pcodeblockbit[r * Z + K_r - L], ptempbit, K_r);
     }
     k = 0;
   }
