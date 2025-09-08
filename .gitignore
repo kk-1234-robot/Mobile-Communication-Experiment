@@ -1,0 +1,8 @@
+#忽略.obj文件
+*.obj
+#忽略.d文件
+*.d
+#忽略.out文件
+*.out
+#忽略文件complie_commands.json
+compile_commands.json   
