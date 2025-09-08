@@ -1,0 +1,9 @@
+{
+    "files.associations": {
+        "*.gel": "c",
+        "*.cmd": "c",
+        "*.cla": "c",
+        "*.xs": "javascript",
+        "*.syscfg": "javascript"
+    }
+}

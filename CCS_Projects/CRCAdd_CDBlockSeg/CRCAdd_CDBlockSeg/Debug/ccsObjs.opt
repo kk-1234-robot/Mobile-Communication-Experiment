@@ -1,0 +1,5 @@
+"./Source/Globe.obj"
+"./Source/main.obj"
+"./Source/task_1.obj"
+"../linker.cmd"
+-llibc.a
