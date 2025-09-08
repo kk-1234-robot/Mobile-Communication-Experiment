@@ -21,17 +21,17 @@ int main(void)
   int *poutbit = NULL;
   int *pcdblocksegbit = NULL;
 
-  udbitlength = tbsize + 24; /*ï¿½ï¿½ï¿½ï¿½CRCï¿½Ä³ï¿½ï¿½ï¿½*/
+  udbitlength = tbsize + 24; /*CRCÐ£ÑéÎ»³¤¶È*/
 
-  /*ï¿½ï¿½ï¿½ï¿½CRC*/
-  ptempbit = &InterweaveData[0]; /*ï¿½Í½ï¿½Ö¯bufferï¿½ï¿½ï¿½ï¿½*/
+  /*CRC*/
+  ptempbit = &InterweaveData[0]; /*½»Ö¯bufferÖ¸Õë*/
   poutbit = &OriginalBuffer[0];
   CRCAdd(poutbit, ptempbit, tbsize);
 
-  /*ï¿½ï¿½ï¿½Ö¸ï¿½*/
+  /*Âë¿é·Ö¶Î*/
   pcdblocksegbit = &CodeBlockBit[0][0];
   poutbit = &OriginalBuffer[0];
-  ptempbit = &InterweaveData[0]; /*ï¿½Í½ï¿½Ö¯bufferï¿½ï¿½ï¿½ï¿½*/
+  ptempbit = &InterweaveData[0]; /*½»Ö¯bufferÖ¸Õë*/
   cdblockseg(pcdblocksegbit, poutbit, ptempbit, udbitlength);
 
   return 0;
