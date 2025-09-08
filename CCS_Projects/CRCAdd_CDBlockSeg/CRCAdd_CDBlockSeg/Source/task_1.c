@@ -27,7 +27,7 @@ int CRCAdd(int *poutbit, int *ptempinput, unsigned int udBitLen)
   int L = 24;
   // 生成多项式
   int *poly;
-  poly = &G;
+  poly = G;
   int i = 0;
   int j = 0;
 
@@ -63,7 +63,7 @@ int CRCbAdd(int *poutbit, int *ptempinput,
   int L = 24;
   // 生成多项式
   int *poly;
-  poly = &G1;
+  poly = G1;
   int i = 0;
   int j = 0;
   for (i = 0; i < udBitLen; i++)
@@ -153,6 +153,7 @@ int cdblockseg(int *pcodeblockbit,
   // 码块分割
   k = F;
   s = 0;
+  unsigned int i = 0;
   // 根据对数组的理解不同可能需要修改部K_r的值为6144.
   for (r = 0; r < C; r++)
   {
@@ -161,9 +162,9 @@ int cdblockseg(int *pcodeblockbit,
     if (r == 0 && k > 0)
     {
       // 填充比特可用特殊值标记，这里用-1
-      for (unsigned int i = 0; i < k; i++)
+      for (i = 0; i < k; i++)
         pcodeblockbit[r * Z + i] = -1;
-      for (unsigned int i = k; i < K_r - L; i++)
+      for (i = k; i < K_r - L; i++)
       {
         pcodeblockbit[r * Z + i] = pinputbit[s + i - k];
       }
@@ -171,7 +172,7 @@ int cdblockseg(int *pcodeblockbit,
     }
     else
     {
-      for (unsigned int i = 0; i < K_r - L; i++)
+      for (i = 0; i < K_r - L; i++)
       {
         pcodeblockbit[r * Z + i] = pinputbit[s + i];
       }

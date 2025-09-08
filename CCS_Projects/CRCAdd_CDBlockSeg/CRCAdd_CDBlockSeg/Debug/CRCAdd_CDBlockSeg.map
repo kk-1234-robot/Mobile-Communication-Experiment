@@ -1,10 +1,10 @@
 ******************************************************************************
                TMS320C6x Linker PC v8.3.13                     
 ******************************************************************************
->> Linked Wed Sep  3 23:38:45 2025
+>> Linked Mon Sep  8 19:35:52 2025
 
 OUTPUT FILE NAME:   <CRCAdd_CDBlockSeg.out>
-ENTRY POINT SYMBOL: "_c_int00"  address: 00810980
+ENTRY POINT SYMBOL: "_c_int00"  address: 00811840
 
 
 MEMORY CONFIGURATION
@@ -12,7 +12,7 @@ MEMORY CONFIGURATION
          name            origin    length      used     unused   attr    fill
 ----------------------  --------  ---------  --------  --------  ----  --------
   VECTORS               00800000   00000400  00000000  00000400  RWIX
-  LL2MEM                00800400   0007fc00  0002c8ac  00053354  RWIX
+  LL2MEM                00800400   0007fc00  0002db3c  000520c4  RWIX
   MSMCSRAM              0c000000   00400000  00000000  00400000  RWIX
   DDR3                  80000000   80000000  000ec0ec  7ff13f14  RWIX
 
@@ -23,12 +23,13 @@ run origin  load origin   length   init length attrs members
 ----------  ----------- ---------- ----------- ----- -------
 00800400    00800400    00010000   00000000    rw-
   00800400    00800400    00010000   00000000    rw- .stack
-00810400    00810400    00000740   00000740    r-x
-  00810400    00810400    00000740   00000740    r-x .text
-00810b40    00810b40    0000000c   00000000    rw-
-  00810b40    00810b40    0000000c   00000000    rw- .fardata
-00810b50    00810b50    0001c160   0001c160    r--
-  00810b50    00810b50    0001c160   0001c160    r-- .cinit
+00810400    00810400    000019d0   000019d0    r-x
+  00810400    00810400    000016e0   000016e0    r-x .text
+  00811ae0    00811ae0    000002f0   000002f0    r-- .const
+00811dd0    00811dd0    0000000c   00000000    rw-
+  00811dd0    00811dd0    0000000c   00000000    rw- .fardata
+00811de0    00811de0    0001c160   0001c160    r--
+  00811de0    00811de0    0001c160   0001c160    r-- .cinit
 80000000    80000000    000ec0ec   00000000    rw-
   80000000    80000000    000ec0ec   00000000    rw- myDDRdata
 
@@ -38,35 +39,45 @@ SECTION ALLOCATION MAP
  output                                  attributes/
 section   page    origin      length       input sections
 --------  ----  ----------  ----------   ----------------
-.text      0    00810400    00000740     
-                  00810400    00000100     rts6600e_elf.lib : copy_decompress_rle.c.obj (.text:__TI_decompress_rle_core)
-                  00810500    000000e0                      : exit.c.obj (.text:exit)
-                  008105e0    000000e0                      : memset.c.obj (.text:memset)
-                  008106c0    000000c0                      : autoinit.c.obj (.text:__TI_auto_init_nobinit_nopinit:__TI_auto_init_nobinit_nopinit)
-                  00810780    000000c0                      : tls.c.obj (.text:tls:init:__TI_tls_init)
-                  00810840    000000a0     main.obj (.text)
-                  008108e0    000000a0     rts6600e_elf.lib : memcpy64.asm.obj (.text:memcpy)
-                  00810980    00000080                      : boot.c.obj (.text:_c_int00)
-                  00810a00    00000060     task_1.obj (.text)
-                  00810a60    00000040     rts6600e_elf.lib : args_main.c.obj (.text:_args_main)
-                  00810aa0    00000020                      : startup.c.obj (.text:_system_post_cinit)
-                  00810ac0    00000020                      : pre_init.c.obj (.text:_system_pre_init)
-                  00810ae0    00000020                      : exit.c.obj (.text:abort)
-                  00810b00    00000020                      : copy_decompress_none.c.obj (.text:decompress:none:__TI_decompress_none)
-                  00810b20    00000020                      : copy_decompress_rle.c.obj (.text:decompress:rle24:__TI_decompress_rle24)
+.text      0    00810400    000016e0     
+                  00810400    000007c0     task_1.obj (.text)
+                  00810bc0    000005e0     rts6600e_elf.lib : divd.c.obj (.text:__c6xabi_divd)
+                  008111a0    00000100                      : copy_decompress_rle.c.obj (.text:__TI_decompress_rle_core)
+                  008112a0    000000e0                      : exit.c.obj (.text:exit)
+                  00811380    000000e0                      : memset.c.obj (.text:memset)
+                  00811460    000000c0                      : autoinit.c.obj (.text:__TI_auto_init_nobinit_nopinit:__TI_auto_init_nobinit_nopinit)
+                  00811520    000000c0                      : tls.c.obj (.text:tls:init:__TI_tls_init)
+                  008115e0    000000a0     main.obj (.text)
+                  00811680    000000a0     rts6600e_elf.lib : memcpy64.asm.obj (.text:memcpy)
+                  00811720    000000a0                      : modf.c.obj (.text:modf)
+                  008117c0    00000080                      : fixdu.c.obj (.text:__c6xabi_fixdu)
+                  00811840    00000080                      : boot.c.obj (.text:_c_int00)
+                  008118c0    00000060                      : frcmpyd_div.c.obj (.text:__TI_frcmpyd_div)
+                  00811920    00000060                      : llshift.c.obj (.text:__c6xabi_llshru)
+                  00811980    00000040                      : args_main.c.obj (.text:_args_main)
+                  008119c0    00000040                      : ceil.c.obj (.text:ceil)
+                  00811a00    00000040                      : floor.c.obj (.text:floor)
+                  00811a40    00000020                      : startup.c.obj (.text:_system_post_cinit)
+                  00811a60    00000020                      : pre_init.c.obj (.text:_system_pre_init)
+                  00811a80    00000020                      : exit.c.obj (.text:abort)
+                  00811aa0    00000020                      : copy_decompress_none.c.obj (.text:decompress:none:__TI_decompress_none)
+                  00811ac0    00000020                      : copy_decompress_rle.c.obj (.text:decompress:rle24:__TI_decompress_rle24)
 
 .stack     0    00800400    00010000     UNINITIALIZED
                   00800400    00000008     rts6600e_elf.lib : boot.c.obj (.stack)
                   00800408    0000fff8     --HOLE--
 
-.cinit     0    00810b50    0001c160     
-                  00810b50    0001c13e     (.cinit.myDDRdata.load) [load image, compression = rle]
-                  0082cc8e    0000000a     (.cinit..fardata.load) [load image, compression = rle]
-                  0082cc98    00000008     (__TI_handler_table)
-                  0082cca0    00000010     (__TI_cinit_table)
+.cinit     0    00811de0    0001c160     
+                  00811de0    0001c13e     (.cinit.myDDRdata.load) [load image, compression = rle]
+                  0082df1e    0000000a     (.cinit..fardata.load) [load image, compression = rle]
+                  0082df28    00000008     (__TI_handler_table)
+                  0082df30    00000010     (__TI_cinit_table)
 
-.fardata   0    00810b40    0000000c     UNINITIALIZED
-                  00810b40    0000000c     rts6600e_elf.lib : exit.c.obj (.fardata)
+.const     0    00811ae0    000002f0     
+                  00811ae0    000002f0     task_1.obj (.const:$P$T0$1)
+
+.fardata   0    00811dd0    0000000c     UNINITIALIZED
+                  00811dd0    0000000c     rts6600e_elf.lib : exit.c.obj (.fardata)
 
 myDDRdata 
 *          0    80000000    000ec0ec     UNINITIALIZED
@@ -79,42 +90,49 @@ MODULE SUMMARY
        ------                       ----   -------   -------
     .\Source\
        Globe.obj                    0      0         966892 
+       task_1.obj                   1984   752       0      
        main.obj                     160    0         0      
-       task_1.obj                   96     0         0      
     +--+----------------------------+------+---------+---------+
-       Total:                       256    0         966892 
+       Total:                       2144   752       966892 
                                                             
     D:\ti\ccs2020\ccs\tools\compiler\ti-cgt-c6000_8.3.13\lib\rts6600e_elf.lib
+       divd.c.obj                   1504   0         0      
        copy_decompress_rle.c.obj    288    0         0      
        exit.c.obj                   256    0         12     
        memset.c.obj                 224    0         0      
        autoinit.c.obj               192    0         0      
        tls.c.obj                    192    0         0      
        memcpy64.asm.obj             160    0         0      
+       modf.c.obj                   160    0         0      
        boot.c.obj                   128    0         0      
+       fixdu.c.obj                  128    0         0      
+       frcmpyd_div.c.obj            96     0         0      
+       llshift.c.obj                96     0         0      
        args_main.c.obj              64     0         0      
+       ceil.c.obj                   64     0         0      
+       floor.c.obj                  64     0         0      
        copy_decompress_none.c.obj   32     0         0      
        pre_init.c.obj               32     0         0      
        startup.c.obj                32     0         0      
     +--+----------------------------+------+---------+---------+
-       Total:                       1600   0         12     
+       Total:                       3712   0         12     
                                                             
        Stack:                       0      0         65536  
        Linker Generated:            0      115040    0      
     +--+----------------------------+------+---------+---------+
-       Grand Total:                 1856   115040    1032440
+       Grand Total:                 5856   115792    1032440
 
 
 LINKER GENERATED COPY TABLES
 
-__TI_cinit_table @ 0082cca0 records: 2, size/record: 8, table size: 16
-	myDDRdata: load addr=00810b50, load size=0001c13e bytes, run addr=80000000, run size=000ec0ec bytes, compression=rle
-	.fardata: load addr=0082cc8e, load size=0000000a bytes, run addr=00810b40, run size=0000000c bytes, compression=rle
+__TI_cinit_table @ 0082df30 records: 2, size/record: 8, table size: 16
+	myDDRdata: load addr=00811de0, load size=0001c13e bytes, run addr=80000000, run size=000ec0ec bytes, compression=rle
+	.fardata: load addr=0082df1e, load size=0000000a bytes, run addr=00811dd0, run size=0000000c bytes, compression=rle
 
 
 LINKER GENERATED HANDLER TABLE
 
-__TI_handler_table @ 0082cc98 records: 2, size/record: 4, table size: 8
+__TI_handler_table @ 0082df28 records: 2, size/record: 4, table size: 8
 	index: 0, handler: __TI_decompress_rle24
 	index: 1, handler: __TI_decompress_none
 
@@ -123,47 +141,58 @@ GLOBAL SYMBOLS: SORTED ALPHABETICALLY BY Name
 
 address   name                           
 -------   ----                           
-00810ae0  C$$EXIT                        
-00810a00  CRCAdd                         
-00810a18  CRCbAdd                        
+00811a80  C$$EXIT                        
+00810470  CRCAdd                         
+008105b4  CRCbAdd                        
 80054600  CodeBlockBit                   
 800ec020  G                              
 800ec088  G1                             
 80000000  InterweaveData                 
 800a2600  OriginalBuffer                 
-0082cca0  __TI_CINIT_Base                
-0082ccb0  __TI_CINIT_Limit               
-0082cc98  __TI_Handler_Table_Base        
-0082cca0  __TI_Handler_Table_Limit       
+0082df30  __TI_CINIT_Base                
+0082df40  __TI_CINIT_Limit               
+0082df28  __TI_Handler_Table_Base        
+0082df30  __TI_Handler_Table_Limit       
 00810400  __TI_STACK_END                 
 00010000  __TI_STACK_SIZE                
 00000000  __TI_STATIC_BASE               
 UNDEFED   __TI_TLS_INIT_Base             
 UNDEFED   __TI_TLS_INIT_Limit            
-008106c0  __TI_auto_init_nobinit_nopinit 
-00810b40  __TI_cleanup_ptr               
-00810b00  __TI_decompress_none           
-00810b20  __TI_decompress_rle24          
-00810b44  __TI_dtors_ptr                 
-00810b48  __TI_enable_exit_profile_output
+00811460  __TI_auto_init_nobinit_nopinit 
+00811dd0  __TI_cleanup_ptr               
+00811aa0  __TI_decompress_none           
+00811ac0  __TI_decompress_rle24          
+00811dd4  __TI_dtors_ptr                 
+00811dd8  __TI_enable_exit_profile_output
+008118c0  __TI_frcmpyd_div               
 ffffffff  __TI_pprof_out_hndl            
 ffffffff  __TI_prof_data_size            
 ffffffff  __TI_prof_data_start           
-00810780  __TI_tls_init                  
+00811520  __TI_tls_init                  
 ffffffff  __binit__                      
+00810bc0  __c6xabi_divd                  
+008117c0  __c6xabi_fixdu                 
+00811920  __c6xabi_llshru                
 ffffffff  __c_args__                     
-00810a60  _args_main                     
-00810980  _c_int00                       
+00811980  _args_main                     
+00811840  _c_int00                       
 00800400  _stack                         
-00810aa0  _system_post_cinit             
-00810ac0  _system_pre_init               
-00810ae0  abort                          
+00811a40  _system_post_cinit             
+00811a60  _system_pre_init               
+00811a80  abort                          
 ffffffff  binit                          
-00810a30  cdblockseg                     
-00810500  exit                           
-00810840  main                           
-008108e0  memcpy                         
-008105e0  memset                         
+008106f8  cdblockseg                     
+008119c0  ceil                           
+008119c0  ceill                          
+008112a0  exit                           
+00811a00  floor                          
+00811a00  floorl                         
+008115e0  main                           
+00811680  memcpy                         
+00811380  memset                         
+00811720  modf                           
+00811720  modfl                          
+00810400  upper_bound                    
 
 
 GLOBAL SYMBOLS: SORTED BY Symbol Address 
@@ -174,30 +203,41 @@ address   name
 00010000  __TI_STACK_SIZE                
 00800400  _stack                         
 00810400  __TI_STACK_END                 
-00810500  exit                           
-008105e0  memset                         
-008106c0  __TI_auto_init_nobinit_nopinit 
-00810780  __TI_tls_init                  
-00810840  main                           
-008108e0  memcpy                         
-00810980  _c_int00                       
-00810a00  CRCAdd                         
-00810a18  CRCbAdd                        
-00810a30  cdblockseg                     
-00810a60  _args_main                     
-00810aa0  _system_post_cinit             
-00810ac0  _system_pre_init               
-00810ae0  C$$EXIT                        
-00810ae0  abort                          
-00810b00  __TI_decompress_none           
-00810b20  __TI_decompress_rle24          
-00810b40  __TI_cleanup_ptr               
-00810b44  __TI_dtors_ptr                 
-00810b48  __TI_enable_exit_profile_output
-0082cc98  __TI_Handler_Table_Base        
-0082cca0  __TI_CINIT_Base                
-0082cca0  __TI_Handler_Table_Limit       
-0082ccb0  __TI_CINIT_Limit               
+00810400  upper_bound                    
+00810470  CRCAdd                         
+008105b4  CRCbAdd                        
+008106f8  cdblockseg                     
+00810bc0  __c6xabi_divd                  
+008112a0  exit                           
+00811380  memset                         
+00811460  __TI_auto_init_nobinit_nopinit 
+00811520  __TI_tls_init                  
+008115e0  main                           
+00811680  memcpy                         
+00811720  modf                           
+00811720  modfl                          
+008117c0  __c6xabi_fixdu                 
+00811840  _c_int00                       
+008118c0  __TI_frcmpyd_div               
+00811920  __c6xabi_llshru                
+00811980  _args_main                     
+008119c0  ceil                           
+008119c0  ceill                          
+00811a00  floor                          
+00811a00  floorl                         
+00811a40  _system_post_cinit             
+00811a60  _system_pre_init               
+00811a80  C$$EXIT                        
+00811a80  abort                          
+00811aa0  __TI_decompress_none           
+00811ac0  __TI_decompress_rle24          
+00811dd0  __TI_cleanup_ptr               
+00811dd4  __TI_dtors_ptr                 
+00811dd8  __TI_enable_exit_profile_output
+0082df28  __TI_Handler_Table_Base        
+0082df30  __TI_CINIT_Base                
+0082df30  __TI_Handler_Table_Limit       
+0082df40  __TI_CINIT_Limit               
 80000000  InterweaveData                 
 80054600  CodeBlockBit                   
 800a2600  OriginalBuffer                 
@@ -212,4 +252,4 @@ ffffffff  binit
 UNDEFED   __TI_TLS_INIT_Base             
 UNDEFED   __TI_TLS_INIT_Limit            
 
-[41 symbols]
+[52 symbols]
