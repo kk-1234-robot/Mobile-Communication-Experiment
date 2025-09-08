@@ -2,8 +2,8 @@
 #define TASK_1_H
 
 #include "math.h"
-#include "Globe.h"
-#include "Type.h"
+#include "..\Include\Globe.h"
+#include "..\Include\Type.h"
 
 int upper_bound(int arr[], int size, int target)
 {

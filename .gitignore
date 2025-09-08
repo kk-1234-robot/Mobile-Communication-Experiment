@@ -5,4 +5,6 @@
 #忽略.out文件
 *.out
 #忽略文件complie_commands.json
-compile_commands.json   
+compile_commands.json 
+#忽略.idx文件
+*.idx  
