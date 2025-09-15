@@ -87,7 +87,7 @@ for r = 0: C-1
     k = 0;
 end
 
-cdblkseg_data = reshape(c, 1,[]);
+cdblkseg_data = c;
 
 end
 

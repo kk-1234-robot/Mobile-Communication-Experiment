@@ -53,6 +53,15 @@ Intl_martr = [40 48 56 64 72 80 88 96 104 112 120 128 136 144 152 ...
                     134 408 138 280 142 480 146 444 120 152 ...
                     462 234 158 80 96 902 166 336 170 86 174 ...
                     176 178 120 182 184 186 94 190 480];
+[m,n] = find(Intl_martr == K);
+f1 = Intl_martr(2,n);
+f2 = Intl_martr(3,n);
+index = 1 : 1 : length(data);
+PI_index = mod(f1 * (index - 1) + f2 * (index - 1) .* (index - 1),K) + 1;
+alpha(index) = data(PI_index);
+
+end
+
  
 
       

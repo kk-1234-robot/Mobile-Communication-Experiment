@@ -7,3 +7,9 @@
 
 function output = lte_CB_concate(C,Info_data,data_len)
 
+output = [];
+for i = 1:C
+    output = [output,Info_data(i, 1:1:data_len(1,i))];
+end
+end
+

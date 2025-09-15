@@ -6,7 +6,7 @@
 
 clear; clc; close all;
 
-workpath = "D:\大四课程\Moblie_Communication\courseworks"; %% 改为自己的工作目录
+workpath = "D:\Mobile Communication Experiment\courseworks"; %% 改为自己的工作目录
 cd(workpath);
 addpath(genpath(workpath));
 
