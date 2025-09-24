@@ -31,6 +31,9 @@ tail_prime = reshape(tail_prime,4,3)';
 codedata((i - 1) * 3 + 1,:) = [c,tail_prime(1,:)];
 codedata((i - 1) * 3 + 2,:) = [output,tail_prime(2,:)];
 codedata((i - 1) * 3 + 3,:) = [output_prime,tail_prime(3,:)];
+if i == 1 && F > 0
+    codedata(1:2,1:F) = nan*ones(2,F);
+end
 
 
 end

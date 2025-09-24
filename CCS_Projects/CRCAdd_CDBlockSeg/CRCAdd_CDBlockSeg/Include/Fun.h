@@ -12,4 +12,8 @@ extern int CRCbAdd(int *poutbit, int *ptempinput, unsigned int udBitLen);
 extern int cdblockseg(int *pcodeblockbit, int *pinputbit, int *ptempbit,
                       unsigned int udbitlen);
 
+extern int TurboEncode(int *pinputbit, int *ptempbit, int *poutputbit, int C, int Kp, int Km, int Cm, int F);
+extern int interleaver(int *input_bits, int *output_bits, int K);
+extern int rsc_encode(int *input_bits, int *output_bits, int *tail_bits, int K);
+
 #endif /* FUN_H_ */

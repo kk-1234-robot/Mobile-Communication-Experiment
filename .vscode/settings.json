@@ -1,5 +1,6 @@
 {
     "files.associations": {
-        "globe.h": "c"
+        "globe.h": "c",
+        "math.h": "c"
     }
 }
