@@ -189,19 +189,73 @@ int LTE_RateMatch(int *input_codedata, int *rmdata, int *rmlen, int channel_type
             code_len[i] = Kp + 4;
         }
         RateMatch(&input_codedata[i * (Kp + 4) * 3], code_len[i], &rmdata[i * 3 * (Kp + 4)],
-                  &rmlen[i], channel_type, Nir, C, module_type, Rvdix, Nl, G, i, Km, Kp);
+                  &rmlen[i], channel_type, Nir, C, direction, module_type, Rvdix, Nl, G, i, Km, Kp);
     }
     return 0;
 }
 
 int RateMatch(int *input_codedata, int input_len, int *out_data, int *out_len, int channel_type,
-              int Nir, int C, int module_type, int Rvdix, int Nl, int G, int block_idx)
+              int Nir, int C, int direction, int module_type, int Rvdix, int Nl, int G, int block_idx, int Km, int Kp)
 {
+    int Row_len = 0;
+    int K_w = 3 * input_len;
+    int *temp_bits = (int *)malloc(K_w * sizeof(int));
+    int *temp_bits_interleaved = (int *)malloc(2 * input_len * sizeof(int));
+    SubblockInterleaver(&input_codedata[0], &temp_bits[0], input_len, 0, &Row_len);
+    SubblockInterleaver(&input_codedata[Kp + 4], &temp_bits[input_len], input_len, 0, &Row_len);
+    SubblockInterleaver(&input_codedata[2 * (Kp + 4)], &temp_bits[2 * input_len], input_len, 1, &Row_len);
 
+    int i = 0;
+
+    for (i = 0; i < 2 * input_len; i++)
+    {
+        temp_bits_interleaved[i] = i % 2 == 0 ? temp_bits[input_len + i / 2] : temp_bits[2 * input_len + i / 2];
+    }
+    memecpy(&temp_bits[input_len], &temp_bits_interleaved[0], 2 * input_len * sizeof(int));
+    free(temp_bits_interleaved);
+
+    int N_cb = 0;
+    if (direction == 0)
+    {
+        N_cb = min(floor((double)Nir / C), K_w);
+    }
+    else
+    {
+        N_cb = K_w;
+    }
+
+    int Q_m = 2 * module_type;
+
+    int G_prime = G / (Nl * Q_m);
+    int gamma = mod(G_prime, C);
+    int E = 0;
+    if (block_idx <= C - gamma - 1)
+        E = Nl * Q_m * floor((double)G_prime / C);
+    else
+        E = Nl * Q_m * ceil((double)G_prime / C);
+
+    int K_0 = Row_len * (2 * ceil((double)N_cb / (8 * Row_len)) * Rvdix + 2);
+
+    int k = 0, j = 0;
+
+    *out_len = 0;
+    for (k = 0, j = 0; k < E; j++)
+    {
+        if (temp_bits[(K_0 + j) % N_cb] != -1) // 跳过填充位
+        {
+            out_data[k] = temp_bits[(K_0 + j) % N_cb];
+            k++;
+            (*out_len)++;
+        }
+        else
+        {
+            j++;
+        }
+    }
     return 0;
 }
 
-int SubblockInterleaver(int *input_bits, int *output_bits, int input_len, int intl_mode)
+int SubblockInterleaver(int *input_bits, int *output_bits, int input_len, int intl_mode, int *Row_len)
 {
     int Col_intl[32];
     if (intl_mode == 0 || intl_mode == 1)
@@ -223,6 +277,14 @@ int SubblockInterleaver(int *input_bits, int *output_bits, int input_len, int in
     int col_len = 32;
     int row_len = ceil((double)input_len / col_len);
     int K_pi = row_len * col_len; // 补齐后的长度
+    int start_index = K_pi - input_len;
+    if (start_index > 0)
+    {
+        for (int i = 0; i < start_index; i++)
+        {
+            output_bits[i] = -1; // 用-1填充
+        }
+    }
 
     int i = 0;
     int j = 0;
@@ -230,9 +292,9 @@ int SubblockInterleaver(int *input_bits, int *output_bits, int input_len, int in
     {
         for (i = 0; i < row_len; i++)
         {
-            for (j = 0; j < col_len; j++)
+            for (j = 0; (j < col_len) && (i * col_len + j + start_index < K_pi); j++)
             {
-                output_bits[i * col_len + j] = input_bits[i * col_len + Col_intl[j]];
+                output_bits[i * col_len + j + start_index] = input_bits[i * col_len + Col_intl[j]];
             }
         }
     }
@@ -243,11 +305,54 @@ int SubblockInterleaver(int *input_bits, int *output_bits, int input_len, int in
         {
             Pi_index[i] = (Col_intl[(int)floor((double)i / row_len)] - 1 + ((i % row_len)) * col_len + 1) % K_pi;
         }
-        for (i = 0; i < input_len; i++)
+        for (i = 0; i < input_len - start_index; i++)
         {
-            output_bits[i] = input_bits[Pi_index[i]];
+            output_bits[i + start_index] = input_bits[Pi_index[i]];
         }
         free(Pi_index);
+    }
+    *Row_len = row_len;
+
+    return 0;
+}
+
+int LTE_CB_concat(int C, int *input_sym, int *C_len, int *output_sym, int *output_len, int Kp)
+{
+    int i = 0, j = 0;
+    int pos = 0;
+    for (i = 0; i < C; i++)
+    {
+        for (j = 0; j < C_len[i]; j++)
+        {
+            output_sym[pos] = input_sym[i * 3 * (Kp + 4) + j];
+            pos++;
+        }
+    }
+    *output_len = pos;
+    return 0;
+}
+
+int LTE_interleaver(int *data_in, int prb_num, int Qm, int *data_out)
+{
+    int symb_len = prb_num * 12 * Qm;
+    int data_len = prb_num * 144 * Qm;
+    int data_row = data_len / (12 * Qm);
+    int count = 0;
+    int index = 0;
+    int len = 0;
+
+    int i = 0, j = 0;
+    for (i = 0; i < 12; i++)
+    {
+        for (j = 0; j < data_row; j++)
+        {
+            index = j * 12 * Qm + i * Qm;
+            for (count = 0; count < Qm; count++)
+            {
+                data_out[count + len] = data_in[index + count];
+                len++;
+            }
+        }
     }
 
     return 0;

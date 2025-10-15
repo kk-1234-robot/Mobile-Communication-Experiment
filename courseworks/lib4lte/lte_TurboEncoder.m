@@ -20,24 +20,19 @@ index = [4,2,10,8,1,6,7,12,5,3,11,9];
 
 for i = 1:C
 
-c = info_data(i,:);
-c_prime = info_data_prime(i,:);
-
-[output,tail_bits]=rsc_encode(c,length(c));
-[output_prime,tail_bits_prime] = rsc_encode(c_prime,length(c_prime));
-tail = reshape( [tail_bits;tail_bits_prime]',1,[]);
-tail_prime(1:1:length(tail)) = tail(index);
-tail_prime = reshape(tail_prime,4,3)';
-codedata((i - 1) * 3 + 1,:) = [c,tail_prime(1,:)];
-codedata((i - 1) * 3 + 2,:) = [output,tail_prime(2,:)];
-codedata((i - 1) * 3 + 3,:) = [output_prime,tail_prime(3,:)];
-if i == 1 && F > 0
-    codedata(1:2,1:F) = nan*ones(2,F);
+    c = info_data(i,:);
+    c_prime = info_data_prime(i,:);
+    
+    [output,tail_bits]=rsc_encode(c,length(c));
+    [output_prime,tail_bits_prime] = rsc_encode(c_prime,length(c_prime));
+    tail = reshape( [tail_bits;tail_bits_prime]',1,[]);
+    tail_prime(1:1:length(tail)) = tail(index);
+    tail_prime = reshape(tail_prime,4,3)';
+    codedata((i - 1) * 3 + 1,:) = [c,tail_prime(1,:)];
+    codedata((i - 1) * 3 + 2,:) = [output,tail_prime(2,:)];
+    codedata((i - 1) * 3 + 3,:) = [output_prime,tail_prime(3,:)];
+    if i == 1 && F > 0
+        codedata(1:2,1:F) = nan*ones(2,F);
+    end
 end
-
-
-end
-
-
-
 end

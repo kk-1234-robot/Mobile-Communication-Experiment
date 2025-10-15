@@ -45,10 +45,42 @@ int main(void)
   Cm = ptempbit[4];
   F = ptempbit[5];
 
-  int *TurboEncodedBits = malloc((Kp + 4) * C * 3 * sizeof(int));
+  int *TurboEncodedBits = (int *)malloc((Kp + 4) * C * 3 * sizeof(int));
+
+  int *C_len = (int *)malloc(C * sizeof(int));
+
+  int prb_num = 100;
+  int module_type = 3;
+  int Qm = 2 * module_type; // 64QAM
+  int UL_subframe_num = 2;
+  int ue_index = 60;
+  int cellid = 0;
+
+  int channel_type = 1;
+  int Nir = 0;
+  int direction = 1;
+  int Rvdix = 0;
+  int Nl = 1;
+  int G = 12 * 12 * prb_num * Qm;
+
+  int cfi = 1;
+  int cp_type = 0;
 
   /*Turbo编码*/
+  // 输出为TurboEncodedBits， 输入为pcdblocksegbit，ptempbit作为临时buffer
   TurboEncode(pcdblocksegbit, ptempbit, TurboEncodedBits, C, Kp, Km, Cm, F);
+  /*LTE 速率匹配*/
+  // 输出为ptempbit， 输入为TurboEncodedBits
+  LTE_RateMatch(TurboEncodedBits, ptempbit, C_len, channel_type, Nir, C, Cm,
+                direction, module_type, Rvdix, Nl, G, Km, Kp);
+  free(TurboEncodedBits);
+
+  /*LTE 信道编码块级联*/
+  int *ccbcSym = (int *)malloc(3 * (Kp + 4) * C * sizeof(int));
+  int ccbcLen = 0;
+  LTE_CB_concat(C, ptempbit, C_len, ccbcSym, &ccbcLen, Kp);
+
+  free(ccbcSym);
 
   return 0;
 }
