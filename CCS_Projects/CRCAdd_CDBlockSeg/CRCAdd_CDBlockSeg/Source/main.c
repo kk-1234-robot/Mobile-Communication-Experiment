@@ -10,9 +10,10 @@
 #include "..\Include\Fun.h"
 #include "..\Include\Globe.h"
 #include "..\Include\Type.h"
+#include "..\Include\task_1.h"
+#include "..\Include\task_2.h"
 
-int main(void)
-{
+int main(void) {
 
   int tbsize = 57336;
   int udbitlength = 0;
@@ -21,23 +22,23 @@ int main(void)
   int *poutbit = NULL;
   int *pcdblocksegbit = NULL;
 
-  // Âë¿é·Ö¶ÎÏà¹Ø²ÎÊı
+  // ï¿½ï¿½ï¿½Ö¶ï¿½ï¿½ï¿½Ø²ï¿½ï¿½ï¿½
   int C = 0, Kp = 0, Km = 0, Cp = 0, Cm = 0, F = 0;
 
-  udbitlength = tbsize + 24; /*CRCĞ£ÑéÎ»³¤¶È*/
+  udbitlength = tbsize + 24; /*CRCĞ£ï¿½ï¿½Î»ï¿½ï¿½ï¿½ï¿½*/
 
   /*CRC*/
-  ptempbit = &InterweaveData[0]; /*½»Ö¯bufferÖ¸Õë*/
+  ptempbit = &InterweaveData[0]; /*ï¿½ï¿½Ö¯bufferÖ¸ï¿½ï¿½*/
   poutbit = &OriginalBuffer[0];
   CRCAdd(poutbit, ptempbit, tbsize);
 
-  /*Âë¿é·Ö¶Î*/
+  /*ï¿½ï¿½ï¿½Ö¶ï¿½*/
   pcdblocksegbit = &CodeBlockBit[0][0];
   poutbit = &OriginalBuffer[0];
-  ptempbit = &InterweaveData[0]; /*½»Ö¯bufferÖ¸Õë*/
+  ptempbit = &InterweaveData[0]; /*ï¿½ï¿½Ö¯bufferÖ¸ï¿½ï¿½*/
   cdblockseg(pcdblocksegbit, poutbit, ptempbit, udbitlength);
 
-  // ½«Âë¿é·Ö¶ÎÏà¹Ø²ÎÊı´«³ö
+  // ï¿½ï¿½ï¿½ï¿½ï¿½Ö¶ï¿½ï¿½ï¿½Ø²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
   C = ptempbit[0];
   Kp = ptempbit[1];
   Km = ptempbit[2];
@@ -66,30 +67,31 @@ int main(void)
   int cfi = 1;
   int cp_type = 0;
 
-  /*Turbo±àÂë*/
-  // Êä³öÎªTurboEncodedBits£¬ ÊäÈëÎªpcdblocksegbit£¬ptempbit×÷ÎªÁÙÊ±buffer
+  /*Turboï¿½ï¿½ï¿½ï¿½*/
+  // ï¿½ï¿½ï¿½ÎªTurboEncodedBitsï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Îªpcdblocksegbitï¿½ï¿½ptempbitï¿½ï¿½Îªï¿½ï¿½Ê±buffer
   TurboEncode(pcdblocksegbit, ptempbit, TurboEncodedBits, C, Kp, Km, Cm, F);
-  /*LTE ËÙÂÊÆ¥Åä*/
-  // Êä³öÎªptempbit£¬ ÊäÈëÎªTurboEncodedBits
+  /*LTE ï¿½ï¿½ï¿½ï¿½Æ¥ï¿½ï¿½*/
+  // ï¿½ï¿½ï¿½Îªptempbitï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ÎªTurboEncodedBits
   LTE_RateMatch(TurboEncodedBits, ptempbit, C_len, channel_type, Nir, C, Cm,
                 direction, module_type, Rvdix, Nl, G, Km, Kp);
   free(TurboEncodedBits);
 
-  /*LTE ĞÅµÀ±àÂë¿é¼¶Áª*/
+  /*LTE ï¿½Åµï¿½ï¿½ï¿½ï¿½ï¿½é¼¶ï¿½ï¿½*/
   int *ccbcSym = (int *)malloc(3 * (Kp + 4) * C * sizeof(int));
   int ccbcLen = 0;
   LTE_CB_concat(C, ptempbit, C_len, ccbcSym, &ccbcLen, Kp);
 
-  /*LTE ËÙÂÊÆ¥Åäºó±ÈÌØ½»Ö¯*/
+  /*LTE ï¿½ï¿½ï¿½ï¿½Æ¥ï¿½ï¿½ï¿½ï¿½ï¿½Ø½ï¿½Ö¯*/
   int *intlvSym = (int *)malloc(ccbcLen * sizeof(int));
   int intlvLen = 0;
   LTE_interleaver(ccbcSym, prb_num, Qm, intlvSym, &intlvLen);
   free(ccbcSym);
 
-  /*LTE Î±Ëæ»úĞòÁĞ²úÉú*/
+  /*LTE Î±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ğ²ï¿½ï¿½ï¿½*/
   int *scramble_Sym = (int *)malloc(intlvLen * sizeof(int));
-  int vrb_num = prb_num; // 1¸öUEÕ¼ÓÃµÄVRBÊı
-  lte_scramble(intlvSym, intlvLen, vrb_num, Qm, UL_subframe_num, ue_index, cellid, scramble_Sym);
+  int vrb_num = prb_num; // 1ï¿½ï¿½UEÕ¼ï¿½Ãµï¿½VRBï¿½ï¿½
+  lte_scramble(intlvSym, intlvLen, vrb_num, Qm, UL_subframe_num, ue_index,
+               cellid, scramble_Sym);
   free(intlvSym);
 
   /* this is in . c file, to record the data -> file */
@@ -98,15 +100,13 @@ int main(void)
   FILE *fp;
   int idx;
   int jdx;
-  int rows = N; /*¼ÙÉèÊı¾İ¾ØÕóµÄĞĞÊıÎªN*/
-  int cols = M; /*¼ÙÉèÊı¾İ¾ØÕóµÄÁĞÊıÎªM*/
-  fp = fopen("ccsdata. ascii", "w+");
+  int rows = N; /*ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½İ¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÎªN*/
+  int cols = M; /*ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½İ¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÎªM*/
+  fp = fopen("ccsdata.ascii", "w+");
 
-  /*Ğ´Êı¾İ,ÖğĞĞĞ´Èë·½Ê½,ÒÔÕûĞÎ(%d)ÀàĞÍÊı¾İÎªÀı*/
-  for (idx = 0; idx < rows; idx++)
-  {
-    for (jdx = 0; jdx < cols; jdx++)
-    {
+  /*Ğ´ï¿½ï¿½ï¿½ï¿½,ï¿½ï¿½ï¿½ï¿½Ğ´ï¿½ë·½Ê½,ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(%d)ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½*/
+  for (idx = 0; idx < rows; idx++) {
+    for (jdx = 0; jdx < cols; jdx++) {
       fprintf(fp, "%d\n", scramble_Sym[jdx]);
     }
   }

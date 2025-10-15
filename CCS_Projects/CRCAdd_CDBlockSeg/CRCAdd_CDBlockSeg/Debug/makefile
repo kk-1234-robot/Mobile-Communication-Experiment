@@ -13,6 +13,7 @@ ORDERED_OBJS += \
 "./Source/Globe.obj" \
 "./Source/main.obj" \
 "./Source/task_1.obj" \
+"./Source/task_2.obj" \
 "../linker.cmd" \
 $(GEN_CMDS__FLAG) \
 -llibc.a \
@@ -144,8 +145,8 @@ CRCAdd_CDBlockSeg.out: $(OBJS) $(CMD_SRCS) $(GEN_CMDS)
 # Other Targets
 clean:
 	-$(RM) $(EXE_OUTPUTS__QUOTED)
-	-$(RM) "Source\Globe.obj" "Source\main.obj" "Source\task_1.obj" 
-	-$(RM) "Source\Globe.d" "Source\main.d" "Source\task_1.d" 
+	-$(RM) "Source\Globe.obj" "Source\main.obj" "Source\task_1.obj" "Source\task_2.obj" 
+	-$(RM) "Source\Globe.d" "Source\main.d" "Source\task_1.d" "Source\task_2.d" 
 	-@echo 'Finished clean'
 	-@echo ' '
 

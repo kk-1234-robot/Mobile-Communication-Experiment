@@ -8,31 +8,37 @@ SHELL = cmd.exe
 C_SRCS += \
 ../Source/Globe.c \
 ../Source/main.c \
-../Source/task_1.c 
+../Source/task_1.c \
+../Source/task_2.c 
 
 C_DEPS += \
 ./Source/Globe.d \
 ./Source/main.d \
-./Source/task_1.d 
+./Source/task_1.d \
+./Source/task_2.d 
 
 OBJS += \
 ./Source/Globe.obj \
 ./Source/main.obj \
-./Source/task_1.obj 
+./Source/task_1.obj \
+./Source/task_2.obj 
 
 OBJS__QUOTED += \
 "Source\Globe.obj" \
 "Source\main.obj" \
-"Source\task_1.obj" 
+"Source\task_1.obj" \
+"Source\task_2.obj" 
 
 C_DEPS__QUOTED += \
 "Source\Globe.d" \
 "Source\main.d" \
-"Source\task_1.d" 
+"Source\task_1.d" \
+"Source\task_2.d" 
 
 C_SRCS__QUOTED += \
 "../Source/Globe.c" \
 "../Source/main.c" \
-"../Source/task_1.c" 
+"../Source/task_1.c" \
+"../Source/task_2.c" 
 
 
