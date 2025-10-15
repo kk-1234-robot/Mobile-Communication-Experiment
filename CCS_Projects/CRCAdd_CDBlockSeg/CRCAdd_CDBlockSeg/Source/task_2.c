@@ -211,13 +211,13 @@ int RateMatch(int *input_codedata, int input_len, int *out_data, int *out_len, i
     {
         temp_bits_interleaved[i] = i % 2 == 0 ? temp_bits[input_len + i / 2] : temp_bits[2 * input_len + i / 2];
     }
-    memecpy(&temp_bits[input_len], &temp_bits_interleaved[0], 2 * input_len * sizeof(int));
+    memcpy(&temp_bits[input_len], &temp_bits_interleaved[0], 2 * input_len * sizeof(int));
     free(temp_bits_interleaved);
 
     int N_cb = 0;
     if (direction == 0)
     {
-        N_cb = min(floor((double)Nir / C), K_w);
+        N_cb = fmin(floor((double)Nir / C), K_w);
     }
     else
     {
