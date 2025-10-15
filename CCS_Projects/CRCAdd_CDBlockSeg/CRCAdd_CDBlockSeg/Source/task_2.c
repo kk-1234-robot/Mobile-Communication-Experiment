@@ -332,7 +332,7 @@ int LTE_CB_concat(int C, int *input_sym, int *C_len, int *output_sym, int *outpu
     return 0;
 }
 
-int LTE_interleaver(int *data_in, int prb_num, int Qm, int *data_out)
+int LTE_interleaver(int *data_in, int prb_num, int Qm, int *data_out, int *out_len)
 {
     int symb_len = prb_num * 12 * Qm;
     int data_len = prb_num * 144 * Qm;
@@ -350,10 +350,11 @@ int LTE_interleaver(int *data_in, int prb_num, int Qm, int *data_out)
             for (count = 0; count < Qm; count++)
             {
                 data_out[count + len] = data_in[index + count];
-                len++;
             }
+            len = len + Qm;
         }
     }
 
+    *out_len = len;
     return 0;
 }

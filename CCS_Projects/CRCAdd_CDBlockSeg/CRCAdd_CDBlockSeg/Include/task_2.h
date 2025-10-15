@@ -18,6 +18,8 @@ int SubblockInterleaver(int *input_bits, int *output_bits, int input_len, int in
 
 int LTE_CB_concat(int C, int *input_sym, int *C_len, int *output_sym, int *output_len, int Kp);
 
-int LTE_interleaver(int *data_in, int prb_num, int Qm, int *data_out);
+int LTE_interleaver(int *data_in, int prb_num, int Qm, int *data_out, int *out_len);
+
+int lte_scramble(int *intlvSym, int input_len, int vrb_num, int Qm, int subframeno, int ue_index, int cell_id, int *scramble_Sym);
 
 #endif
