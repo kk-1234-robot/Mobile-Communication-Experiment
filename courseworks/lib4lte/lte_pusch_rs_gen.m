@@ -74,3 +74,64 @@ fai_24sc = [-1,	3,	1,	-3,	3,	-1,	1,	3,	-3,	3,	1,	3,	-3,	3,	1,	1,	-1,	1,	3,	-3,	3
 -1,	-3,	-1,	-1,	1,	-3,	-1,	-1,	1,	-1,	-3,	1,	1,	-3,	1,	-3,	-3,	3,	1,	1,	-1,	3,	-1,	-1;
 1,	1,	-1,	-1,	-3,	-1,	3,	-1,	3,	-1,	1,	3,	1,	-1,	3,	1,	3,	-3,	-3,	1,	-1,	-1,	1,	3 ];
 
+%%
+% 上面给定的参数已经默认NRB_SC(每个资源块包含的子载波数量)值就是12
+NRB_SC = 12;
+MRS_SC = rbnum * NRB_SC;
+
+%u的计算
+if group_hop_flag == 0
+    f_gh = 0;
+else %这个分支在主函数中无法验证
+    c_init = floor(cellid/30);
+    c_sequence = pseudo_random_seq_gen(c_init,8*slotno + 7 + 1);%注意matlab数组下标从1开始与协议中数组下标从0开始的区别
+    f_gh = c_sequence(8*slotno + 1:8*slotno + 8)*(2.^(0:7))';%注意matlab数组下标从1开始与协议中数组下标从0开始的区别
+end
+fPUSCH_ss = mod(mod(cellid,30) + deltass,30);
+u = mod(f_gh + fPUSCH_ss,30);
+
+%v的计算
+if rbnum < 6
+    v = 0;
+else
+    if (group_hop_flag == 0)&&(seq_hop_flag == 1)
+        c_init = floor(cellid/30)*32 + fPUSCH_ss;
+        c_sequence = pseudo_random_seq_gen(c_init,slotno + 1);%注意matlab数组下标从1开始与协议中数组下标从0开始的区别
+        v= c_sequence(slotno + 1);%注意matlab数组下标从1开始与协议中数组下标从0开始的区别
+    else
+        v = 0;
+    end
+end
+
+%alpha的计算
+%%
+%合理怀疑所给函数原型中ndmrs2与ndmrs1定义写反了(与3GPP 36211-910 5.5.2.1.1节内容相比)，下面代码遵从函数原型定义
+%%
+ndmrs2 = ndmrs2_table(cyc_shift + 1);
+c_init = floor(cellid/30)*32 + fPUSCH_ss;
+NUL_symb = 7;
+c_sequence = pseudo_random_seq_gen(c_init,8*NUL_symb*slotno + 8);%注意matlab数组下标从1开始与协议中数组下标从0开始的区别
+nPRS = c_sequence(8*NUL_symb*slotno + 1:8*NUL_symb*slotno + 8)*(2.^(0:7))';%注意matlab数组下标从1开始与协议中数组下标从0开始的区别
+n_cs = mod(ndmrs1 + ndmrs2 + nPRS,12);
+alpha = 2*pi*n_cs/12;
+
+%base sequence的计算
+if rbnum >= 3
+    NRS_ZC = max(prime_table(prime_table<MRS_SC));
+    q_bar = NRS_ZC*(u+1)/31;
+    q = floor(q_bar + 0.5)+v*(-1)^(floor(2*q_bar));
+    ZC_sequence = exp((-1j*pi*q/NRS_ZC)*(0:1:NRS_ZC-1).*(1:1:NRS_ZC));
+    base_sequence =  ZC_sequence(mod((0:1:MRS_SC-1),NRS_ZC)+1);
+%下面分支在主函数中无法验证
+elseif rbnum == 2
+    base_sequence = exp(1j*pi/4*(fai_24sc(u+1,(1:1:MRS_SC))));%注意matlab数组下标从1开始与协议中数组下标从0开始的区别
+elseif rbnum == 1
+    base_sequence = exp(1j*pi/4*(fai_12sc(u+1,(1:1:MRS_SC))));%注意matlab数组下标从1开始与协议中数组下标从0开始的区别
+else
+    disp("rbnum ERROR");
+end
+
+basic_out = base_sequence;
+out = base_sequence.*exp(1j*alpha*(0:1:MRS_SC-1));
+end
+
