@@ -278,15 +278,15 @@ int SubblockInterleaver(int *input_bits, int *output_bits, int input_len, int in
     int row_len = ceil((double)input_len / col_len);
     int K_pi = row_len * col_len; // 补齐后的长度
     int start_index = K_pi - input_len;
+    int i = 0;
     if (start_index > 0)
     {
-        for (int i = 0; i < start_index; i++)
+        for (i = 0; i < start_index; i++)
         {
             output_bits[i] = -1; // 用-1填充
         }
     }
 
-    int i = 0;
     int j = 0;
     if (intl_mode == 0)
     {
