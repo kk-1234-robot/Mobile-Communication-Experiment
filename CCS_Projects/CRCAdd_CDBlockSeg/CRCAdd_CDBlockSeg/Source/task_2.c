@@ -227,7 +227,7 @@ int RateMatch(int *input_codedata, int input_len, int *out_data, int *out_len, i
     int Q_m = 2 * module_type;
 
     int G_prime = G / (Nl * Q_m);
-    int gamma = mod(G_prime, C);
+    int gamma = G_prime % C;
     int E = 0;
     if (block_idx <= C - gamma - 1)
         E = Nl * Q_m * floor((double)G_prime / C);
