@@ -92,5 +92,25 @@ int main(void)
   lte_scramble(intlvSym, intlvLen, vrb_num, Qm, UL_subframe_num, ue_index, cellid, scramble_Sym);
   free(intlvSym);
 
+  /* this is in . c file, to record the data -> file */
+  int N = 1;
+  int M = intlvLen;
+  FILE *fp;
+  int idx;
+  int jdx;
+  int rows = N; /*假设数据矩阵的行数为N*/
+  int cols = M; /*假设数据矩阵的列数为M*/
+  fp = fopen("ccsdata. ascii", "w+");
+
+  /*写数据,逐行写入方式,以整形(%d)类型数据为例*/
+  for (idx = 0; idx < rows; idx++)
+  {
+    for (jdx = 0; jdx < cols; jdx++)
+    {
+      fprintf(fp, "%d\n", scramble_Sym[jdx]);
+    }
+  }
+  fclose(fp);
+
   return 0;
 }
