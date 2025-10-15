@@ -80,7 +80,17 @@ int main(void)
   int ccbcLen = 0;
   LTE_CB_concat(C, ptempbit, C_len, ccbcSym, &ccbcLen, Kp);
 
+  /*LTE 速率匹配后比特交织*/
+  int *intlvSym = (int *)malloc(ccbcLen * sizeof(int));
+  int intlvLen = 0;
+  LTE_interleaver(ccbcSym, prb_num, Qm, intlvSym, &intlvLen);
   free(ccbcSym);
+
+  /*LTE 伪随机序列产生*/
+  int *scramble_Sym = (int *)malloc(intlvLen * sizeof(int));
+  int vrb_num = prb_num; // 1个UE占用的VRB数
+  lte_scramble(intlvSym, intlvLen, vrb_num, Qm, UL_subframe_num, ue_index, cellid, scramble_Sym);
+  free(intlvSym);
 
   return 0;
 }

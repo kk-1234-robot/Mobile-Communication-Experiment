@@ -20,6 +20,9 @@ int LTE_CB_concat(int C, int *input_sym, int *C_len, int *output_sym, int *outpu
 
 int LTE_interleaver(int *data_in, int prb_num, int Qm, int *data_out, int *out_len);
 
-int lte_scramble(int *intlvSym, int input_len, int vrb_num, int Qm, int subframeno, int ue_index, int cell_id, int *scramble_Sym);
+int lte_scramble(int *intlvSym, int input_len, int vrb_num, int Qm,
+                 int subframeno, int ue_index, int cell_id, int *scramble_Sym);
+
+int pseudo_random_seq_gen(int init_value, int length, int *output_seq, int *output_len);
 
 #endif

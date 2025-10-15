@@ -358,3 +358,46 @@ int LTE_interleaver(int *data_in, int prb_num, int Qm, int *data_out, int *out_l
     *out_len = len;
     return 0;
 }
+
+int lte_scramble(int *intlvSym, int input_len, int vrb_num, int Qm,
+                 int subframeno, int ue_index, int cell_id, int *scramble_Sym)
+{
+    int cinit = 0;
+    int N_rnti = ue_index;
+    int ns = subframeno * 2;
+    cinit = N_rnti * (1 << 14) + floor((double)ns / 2) * (1 << 9) + cell_id;
+    int i = 0;
+    int *prbs = (int *)malloc(input_len * sizeof(int));
+    int prbs_len = 0;
+    pseudo_random_seq_gen(cinit, input_len, prbs, &prbs_len);
+    for (i = 0; i < input_len; i++)
+    {
+        scramble_Sym[i] = intlvSym[i] ^ prbs[i];
+    }
+    free(prbs);
+    return 0;
+}
+
+int pseudo_random_seq_gen(int init_value, int length, int *output_seq, int *output_len)
+{
+    int x1[31] = {0};
+    int x2[31] = {0};
+    int i = 0;
+    int Nc = 1600;
+    x1[0] = 1;
+    for (i = 0; i < 31; i++)
+    {
+        x2[i] = (init_value >> i) & 0x01;
+    }
+    for (i = 0; i < length + Nc - 31 - 1; i++)
+    {
+        x1[i + 31] = (x1[i + 3] + x1[i]) % 2;
+        x2[i + 31] = (x2[i + 3] + x2[i + 2] + x2[i + 1] + x2[i]) % 2;
+    }
+    for (i = 0; i < length; i++)
+    {
+        output_seq[i] = (x1[i + Nc] + x2[i + Nc]) % 2;
+    }
+    *output_len = length;
+    return 0;
+}
